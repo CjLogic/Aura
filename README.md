@@ -1,13 +1,25 @@
 # Aura - Powerful Dev Tools meets Beautiful Aesthetics
 
-Aura is a custom Arch Linux-based distribution built upon the [Ambxst](https://github.com/Axenide/Ambxst) Quickshell. It seamlessly integrates a pre-configured Hyprland desktop environment with a powerful suite of development tools inherited from Omarchy.
+Aura is a custom Arch Linux-based distribution designed to integrate seamlessly with the [Ambxst](https://github.com/Axenide/Ambxst) Quickshell environment. It combines a pre-configured Hyprland desktop with a comprehensive suite of development tools inherited from Omarchy.
 
-Originally forked from Omarchy, Aura has been completely revamped to balance a high-performance workflow with the striking aesthetics of the Ambxst setup. I built this to eliminate the "start from scratch" fatigue—creating a resilient, out-of-the-box system that pairs deep utility with uncompromising eye candy.
+Originally forked from Omarchy, Aura has been completely revamped to balance high-performance workflow capabilities with the striking aesthetics of the Ambxst setup. This distribution provides a resilient, out-of-the-box system that pairs deep utility with refined visual design.
+
+## What is Ambxst?
+
+[Ambxst](https://github.com/Axenide/Ambxst) is a Quickshell-based desktop environment that provides a modern, customizable interface with launcher, status bar, and notification components. Aura ships with a base Hyprland configuration and includes an automated first-boot script to install Ambxst (which requires AUR dependencies).
+
+## System Requirements
+
+- **RAM**: 2GB minimum (4GB recommended)
+- **Disk Space**: 20GB minimum
+- **CPU**: x86_64 processor
+- **Graphics**: GPU with Wayland support recommended
+- **Boot**: UEFI or BIOS
 
 ## Features
 
-- **Pre-configured Hyprland Environment**: Boot directly into a fully customized Hyprland desktop with Aura configs
-- **Aura Auto Installer**: Friendly graphical installer for easy system setup to install Ambxst
+- **Pre-configured Hyprland Environment**: Boot directly into a fully customized Hyprland desktop with base configuration
+- **Automated Ambxst Setup**: First-boot script guides installation of Ambxst environment
 - **Comprehensive Package Set**: Includes 150+ packages covering development tools, desktop environment, and utilities
 - **Developer-Focused**: Pre-installed with Docker, Git tools, language runtimes, and dev utilities
 
@@ -16,9 +28,9 @@ Originally forked from Omarchy, Aura has been completely revamped to balance a h
 - **Window Manager**: Hyprland (Wayland compositor)
 - **Terminal**: kitty
 - **Shell**: Fish with Starship prompt
-- **Application Launcher**: Ambxst
-- **Status Bar**: Ambxst
-- **Notifications**: Ambxst
+- **Application Launcher**: Ambxst (installed via first-boot script)
+- **Status Bar**: Ambxst (installed via first-boot script)
+- **Notifications**: Ambxst (installed via first-boot script)
 - **File Manager**: Nautilus
 - **Login Manager**: SDDM
 
@@ -26,7 +38,7 @@ Originally forked from Omarchy, Aura has been completely revamped to balance a h
 
 ### Development Tools
 
-- **Languages**: Typescript, Ruby, Python, Lua, Dart
+- **Languages**: TypeScript, Ruby, Python, Lua, Dart
 - **Containers**: Docker, Docker Compose
 - **Git Tools**: LazyGit, GitHub CLI
 - **Editors**: Micro, VS Code (via Flatpak)
@@ -47,23 +59,24 @@ Originally forked from Omarchy, Aura has been completely revamped to balance a h
    - Create user account
    - Choose hostname
 4. Reboot after installation completes
-5. Login - you'll be greeted with the Aura Hyprland desktop
+5. Login and you'll be greeted with the Aura Hyprland desktop
+
+For build instructions, see the [aura-iso repository](https://github.com/CjLogic/aura-iso).
 
 ## First Boot
 
-On first boot, new users automatically receive:
+On first login, the Ambxst installation script will automatically appear, providing:
 
-- A welcome modal with install script
-- Complete Hyprland configuration
+- Guided installation of Ambxst Quickshell environment
+- Complete Hyprland configuration integration
 - Aura configs in `~/.config/`
 - All utility scripts in `~/.local/share/aura/bin/`
-- Custom terminal (Ghostty/Foot) setup
 - Fish shell with Starship prompt
 - Fastfetch, btop, and other utilities pre-configured
 
 ## Keybindings
 
-Essential Hyprland keybindings (from Aura):
+Essential Hyprland keybindings:
 
 - `SUPER + RETURN` - Open terminal
 - `SUPER + W` - Close window
@@ -72,71 +85,59 @@ Essential Hyprland keybindings (from Aura):
 - `SUPER + F` - Toggle fullscreen
 - `SUPER + V` - Toggle floating
 
-```
+## Manual Ambxst Installation
 
-## To Manually install Ambxst
+If needed, Ambxst can be installed manually:
 
 ```bash
 curl -L get.axeni.de/ambxst | sh
 ```
 
-incase you need it
+If the installation fails, update the system first:
+
+```bash
+sudo pacman -Syyu --noconfirm
+curl -L get.axeni.de/ambxst | sh
+```
 
 ## Customization
 
 ### Adding Packages
 
-Edit `aura-base.packages` and add package names (one per line).
-make sure there Official Pacman Packages
+Edit `aura-base.packages` and add package names (one per line). Ensure they are official Pacman packages.
 
 ### Modifying Configs
 
-To customize shell configs check:
-
-- [https://axeni.de/ambxst/]
+To customize Ambxst configurations, refer to the [Ambxst documentation](https://axeni.de/ambxst/).
 
 ### Branding
 
-Customize:
+Customize boot and ISO branding:
 
 - Boot menus: `grub/grub.cfg`, `syslinux/syslinux.cfg`
 - ISO metadata: `profiledef.sh`
 
-## Differences from Current aura-iso
-
-| Aspect | Aura-iso | Aura + Ambxst |
-|--------|----------|--------|
-| Build tool | Docker + archiso | archiso directly |
-| Installer | Archinstall/manual | Aura Installer |
-| Configs | Applied during install.sh | Pre-baked in ISO |
-| Package install | Offline mirror | Pre-installed in ISO |
-| First boot | Runs installer scripts | Ready to use immediately |
-
-## Known Issues
-
-- If Ambxst installation fails run 'sudo pacman -Syyu --noconfirm'
-- then retry 'curl -L get.axeni.de/ambxst | sh'
-
 ## Contributing
 
-To contribute:
+Contributions are welcome:
 
 1. Fork the Aura repository
 2. Make your changes
-3. Test with Aura build
-4. Submit pull request
+3. Test with the Aura build process
+4. Submit a pull request
 
 ## License
 
-Aura inherits licenses from:
+Aura is released under the [MIT License](https://opensource.org/licenses/MIT).
 
-- Aura  [MIT License](https://opensource.org/licenses/MIT)
+This project incorporates components from:
 - Arch Linux (GPL)
-- Ambxst
+- Ambxst (see [Ambxst repository](https://github.com/Axenide/Ambxst) for license details)
 
 ## Links
 
 - **Aura**: <https://github.com/CjLogic/Aura>
+- **Aura ISO Builder**: <https://github.com/CjLogic/aura-iso>
 - **Ambxst**: <https://github.com/Axenide/Ambxst>
 - **Arch Linux**: <https://archlinux.org>
 
@@ -144,8 +145,13 @@ Aura inherits licenses from:
 
 For issues specific to:
 
-- **Aura build process**: Create issue or discussion in this repository
-- **Ambxst configs**: Create issue or discussion in Ambxst repository
-- **Arch packages**: Check Arch Linux wiki
+- **Aura build process or ISO**: Create an issue in the [aura-iso repository](https://github.com/CjLogic/aura-iso)
+- **Ambxst configuration**: Create an issue in the [Ambxst repository](https://github.com/Axenide/Ambxst)
+- **Arch packages**: Consult the [Arch Linux wiki](https://wiki.archlinux.org)
+
+## Credits
+
+- **Omarchy**: <https://github.com/basecamp/omarchy>
+- **Ambxst**: <https://github.com/Axenide/Ambxst>
 
 ---

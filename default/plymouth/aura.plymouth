@@ -6,6 +6,6 @@ ModuleName=script
 [script]
 ImageDir=/usr/share/plymouth/themes/aura
 ScriptFile=/usr/share/plymouth/themes/aura/aura.script
-ConsoleLogBackgroundColor=0x1a1b26
+ConsoleLogBackgroundColor=0x07080b
 MonospaceFont=Cantarell 11
 Font=Cantarell 11
