@@ -2,7 +2,7 @@
 
 Aura is a custom Arch Linux-based distribution designed to integrate seamlessly with the [Ambxst](https://github.com/Axenide/Ambxst) Quickshell environment. It combines a pre-configured Hyprland desktop with a comprehensive suite of development tools inherited from Omarchy.
 
-Originally forked from Omarchy, Aura has been completely revamped to balance high-performance workflow capabilities with the striking aesthetics of the Ambxst setup. This distribution provides a resilient, out-of-the-box system that pairs deep utility with refined visual design.
+Originally forked from [Omarchy](https://github.com/basecamp/omarchy), Aura has been completely revamped to balance high-performance workflow capabilities with the striking aesthetics of the Ambxst setup. This distribution provides a resilient, out-of-the-box system that pairs deep utility with refined visual design.
 
 ## What is Ambxst?
 
