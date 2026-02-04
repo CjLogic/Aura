@@ -1,5 +1,5 @@
 function fish_greeting
-    echo -ne '\x1b[38;5;16m'  # Set colour to primary
+    set_color $primary  # Set greeting colour
     echo '       ▄▄▄                         ▄▄▄         '
     echo '      █████   ██    ██  ██████    █████        '
     echo '     ██   ██  ██    ██  ██   ██  ██   ██       '
@@ -7,6 +7,6 @@ function fish_greeting
     echo '     ██   ██  ██    ██  ██   ██  ██   ██ = Powerful dev tools  '
     echo '     ██   ██   ██████   ██   ██  ██   ██   meets Beautiful aesthetics '
 
-    set_color normal
+    set_color $primary
     fastfetch --key-padding-left 5
 end

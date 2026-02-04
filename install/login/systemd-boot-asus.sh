@@ -49,6 +49,13 @@ BOOT_ENTRY=$(find /boot/loader/entries -name "*.conf" -type f | grep -v "fallbac
 if [[ -f "$BOOT_ENTRY" ]]; then
   # Update title to Aura branding
   sudo sed -i 's/^title.*/title Aura/' "$BOOT_ENTRY"
+
+  # Add Plymouth parameters (splash quiet) if not already present
+  if ! grep -q "splash" "$BOOT_ENTRY"; then
+    sudo sed -i '/^options/ s/$/ splash quiet/' "$BOOT_ENTRY"
+    echo "✓ Added Plymouth parameters (splash quiet)"
+  fi
+
   echo "✓ Boot entry updated: $BOOT_ENTRY"
 fi
 
@@ -58,6 +65,13 @@ FALLBACK_ENTRY=$(find /boot/loader/entries -name "*fallback*.conf" -type f | hea
 if [[ -f "$FALLBACK_ENTRY" ]]; then
   # Update fallback title
   sudo sed -i 's/^title.*/title Aura (fallback)/' "$FALLBACK_ENTRY"
+
+  # Add Plymouth parameters to fallback too
+  if ! grep -q "splash" "$FALLBACK_ENTRY"; then
+    sudo sed -i '/^options/ s/$/ splash quiet/' "$FALLBACK_ENTRY"
+    echo "✓ Added Plymouth parameters to fallback"
+  fi
+
   echo "✓ Fallback entry updated: $FALLBACK_ENTRY"
 fi
 
@@ -85,5 +99,6 @@ fi
 echo ""
 echo "✓ systemd-boot configured for ASUS hardware"
 echo "  Bootloader: systemd-boot (ASUS-compatible)"
-echo "  Timeout: 5 seconds"
+echo "  Timeout: 0 (hold SPACE during boot for menu)"
+echo "  Plymouth: enabled (splash quiet)"
 echo "  Editor: disabled (security)"

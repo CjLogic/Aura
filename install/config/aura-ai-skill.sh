@@ -6,3 +6,4 @@ mkdir -p ~/.claude/skills
 
 
 ln -s $AURA_PATH/default/aura-skill ~/.claude/skills/aura
+ln -s $AURA_PATH/default/ambxst-skill ~/.claude/skills/ambxst

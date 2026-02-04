@@ -1,9 +1,9 @@
 #!/bin/bash
 
-aura-cmd-present "$EDITOR" || EDITOR=micro
+aura-cmd-present "$EDITOR" || EDITOR=fresh
 
 case "$EDITOR" in
-com.visualstudio.code | fresh | nano | micro | hx | helix)
+fresh | nano | micro | hx | helix)
   exec aura-launch-tui "$EDITOR" "$@"
   ;;
 *)

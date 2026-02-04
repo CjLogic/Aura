@@ -2,6 +2,11 @@
 
 Aura is a custom Arch Linux-based distribution designed to integrate seamlessly with the [Ambxst](https://github.com/Axenide/Ambxst) Quickshell environment. It combines a pre-configured Hyprland desktop with a comprehensive suite of development tools inherited from Omarchy.
 
+## Need an installer for your favorite Quickshell [Ambxst](https://github.com/Axenide/Ambxst) ?
+
+Aura does all the hard work for you , you dont have to worry about archinstall and all that nonsense.
+support for more shells like [Caelestia](https://github.com/caelestia-dots/caelestia), [illogical-impulse (end-4)](https://github.com/end-4/dots-hyprland) etc
+
 Originally forked from [Omarchy](https://github.com/basecamp/omarchy), Aura has been completely revamped to balance high-performance workflow capabilities with the striking aesthetics of the Ambxst setup. This distribution provides a resilient, out-of-the-box system that pairs deep utility with refined visual design.
 
 ## What is Ambxst?
@@ -10,7 +15,7 @@ Originally forked from [Omarchy](https://github.com/basecamp/omarchy), Aura has 
 
 ## System Requirements
 
-if you have  Asus Hardware check this out [Asus Compatibility Guide](asus-compatibility.md)
+**Asus Compatible** Asus is in included in install, if you have Asus Hardware check this out for more info [Asus Compatibility Guide](asus-compatibility.md)
 
 - **RAM**: 2GB minimum (4GB recommended)
 - **Disk Space**: 20GB minimum
@@ -127,6 +132,10 @@ curl -L get.axeni.de/ambxst | sh
 Edit `aura-base.packages` and add package names (one per line). Ensure they are official Pacman packages.
 
 ### Modifying Configs
+
+If you dont like bash scripts you can delete the bin folder (WARNING:You cant then update Aura)
+
+To customize Aura configurations `~/.config/*`.
 
 To customize Ambxst configurations, refer to the [Ambxst documentation](https://axeni.de/ambxst/).
 

@@ -1,0 +1,12 @@
+#!/bin/bash
+
+aura-cmd-present "$CODE" || CODE=code
+
+case "$CODE" in
+code | vim | micro | nvim)
+  exec aura-launch-tui "$CODE" "$@"
+  ;;
+*)
+  exec setsid uwsm-app -- "$CODE" "$@"
+  ;;
+esac
