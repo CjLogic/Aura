@@ -1,14 +1,40 @@
 #!/bin/bash
 
 default_browser=$(xdg-settings get default-web-browser)
-browser_exec=$(sed -n 's/^Exec=\([^ ]*\).*/\1/p' {~/.local,~/.nix-profile,/usr}/share/applications/$default_browser 2>/dev/null | head -1)
 
-if [[ $browser_exec =~ (firefox|zen|librewolf|mullvad) ]]; then
+# Search all common .desktop file locations including Flatpak
+desktop_file=$(find \
+  ~/.local/share/applications \
+  ~/.local/share/flatpak/exports/share/applications \
+  ~/.nix-profile/share/applications \
+  /var/lib/flatpak/exports/share/applications \
+  /usr/share/applications \
+  -name "$default_browser" -print -quit 2>/dev/null)
+
+if [[ -z "$desktop_file" ]]; then
+  echo "Error: Could not find $default_browser" >&2
+  exit 1
+fi
+
+# Extract browser command - handle Flatpak apps specially
+first_exec=$(sed -n '/^Exec=/{ s/^Exec=//; s/ %[uUfF].*//; s/ @@.*//; p; q; }' "$desktop_file")
+
+if [[ "$first_exec" == /usr/bin/flatpak* ]]; then
+  # Extract the Flatpak app ID (e.g., app.zen_browser.zen)
+  app_id=$(echo "$first_exec" | grep -oP '(?<=\s)[a-zA-Z][a-zA-Z0-9_.]+\.[a-zA-Z0-9_.]+\.[a-zA-Z0-9_.]+(?:\s|$)' | tail -1)
+  browser_exec="flatpak run $app_id"
+  browser_name="$app_id"
+else
+  browser_exec="$first_exec"
+  browser_name="$first_exec"
+fi
+
+if [[ $browser_name =~ (firefox|zen|librewolf|mullvad) ]]; then
   private_flag="--private-window"
-elif [[ $browser_exec =~ edge ]]; then
+elif [[ $browser_name =~ edge ]]; then
   private_flag="--inprivate"
 else
   private_flag="--incognito"
 fi
 
-exec setsid uwsm-app -- "$browser_exec" "${@/--private/$private_flag}"
+exec setsid uwsm-app -- $browser_exec "${@/--private/$private_flag}"

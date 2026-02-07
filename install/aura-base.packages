@@ -59,7 +59,7 @@ llvm
 luarocks
 
 # === AI Dev Tools  ===
-opencode
+#opencode
 
 # === Dev Tools - Databases ===
 postgresql-libs
@@ -77,10 +77,8 @@ hyprland-preview-share-picker
 hypridle
 hyprlock
 hyprsunset
-waybar
 swaybg
 swayosd
-mako
 wofi
 grim
 slurp
@@ -105,6 +103,7 @@ pavucontrol
 wl-clipboard
 wiremix
 kvantum-qt5
+yaru-icon-theme
 
 # === Audio ===
 pamixer

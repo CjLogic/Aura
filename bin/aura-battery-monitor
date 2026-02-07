@@ -1,23 +1,46 @@
 #!/bin/bash
 
 # Designed to be run by systemd timer every 30 seconds and alerts if battery is low
+# Three-tier alerts: info at 30%, warning at 15%, critical at 5%
 
-BATTERY_THRESHOLD=10
-NOTIFICATION_FLAG="/run/user/$UID/aura_battery_notified"
+THRESHOLD_INFO=30
+THRESHOLD_WARNING=15
+THRESHOLD_CRITICAL=5
+
+FLAG_DIR="/run/user/$UID"
+FLAG_INFO="$FLAG_DIR/aura_battery_info"
+FLAG_WARNING="$FLAG_DIR/aura_battery_warning"
+FLAG_CRITICAL="$FLAG_DIR/aura_battery_critical"
+
 BATTERY_LEVEL=$(aura-battery-remaining)
 BATTERY_STATE=$(upower -i $(upower -e | grep 'BAT') | grep -E "state" | awk '{print $2}')
 
-send_notification() {
-  notify-send -u critical "󱐋 Time to recharge!" "Battery is down to ${1}%" -i battery-caution -t 30000
-}
+if [[ -z "$BATTERY_LEVEL" || ! "$BATTERY_LEVEL" =~ ^[0-9]+$ ]]; then
+  exit 0
+fi
 
-if [[ -n "$BATTERY_LEVEL" && "$BATTERY_LEVEL" =~ ^[0-9]+$ ]]; then
-  if [[ $BATTERY_STATE == "discharging" && $BATTERY_LEVEL -le $BATTERY_THRESHOLD ]]; then
-    if [[ ! -f $NOTIFICATION_FLAG ]]; then
-      send_notification $BATTERY_LEVEL
-      touch $NOTIFICATION_FLAG
-    fi
-  else
-    rm -f $NOTIFICATION_FLAG
+if [[ "$BATTERY_STATE" != "discharging" ]]; then
+  rm -f "$FLAG_INFO" "$FLAG_WARNING" "$FLAG_CRITICAL"
+  exit 0
+fi
+
+if [[ $BATTERY_LEVEL -le $THRESHOLD_CRITICAL ]]; then
+  if [[ ! -f "$FLAG_CRITICAL" ]]; then
+    notify-send -u critical "󰂃 Battery Critical!" "Battery is at ${BATTERY_LEVEL}% — plug in now!" -i battery-empty -t 0
+    touch "$FLAG_CRITICAL"
   fi
+elif [[ $BATTERY_LEVEL -le $THRESHOLD_WARNING ]]; then
+  rm -f "$FLAG_CRITICAL"
+  if [[ ! -f "$FLAG_WARNING" ]]; then
+    notify-send -u critical "󱊡 Battery Low" "Battery is at ${BATTERY_LEVEL}% — find a charger soon" -i battery-caution -t 30000
+    touch "$FLAG_WARNING"
+  fi
+elif [[ $BATTERY_LEVEL -le $THRESHOLD_INFO ]]; then
+  rm -f "$FLAG_CRITICAL" "$FLAG_WARNING"
+  if [[ ! -f "$FLAG_INFO" ]]; then
+    notify-send -u normal "󱊢 Battery Notice" "Battery is at ${BATTERY_LEVEL}%" -i battery-low -t 15000
+    touch "$FLAG_INFO"
+  fi
+else
+  rm -f "$FLAG_INFO" "$FLAG_WARNING" "$FLAG_CRITICAL"
 fi
