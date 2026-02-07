@@ -1,11 +1,13 @@
+# Limine bootloader setup with Snapper integration
+# Skips ASUS hardware (uses systemd-boot instead)
+
 # Check if ASUS hardware - ASUS systems use systemd-boot, not Limine
-IS_ASUS=false
 if cat /sys/class/dmi/id/sys_vendor 2>/dev/null | grep -qi "ASUSTeK"; then
-  IS_ASUS=true
   echo "ASUS hardware detected - skipping Limine setup (using systemd-boot for ASUS compatibility)"
   exit 0
 fi
 
+# Only proceed if Limine is installed
 if command -v limine &>/dev/null; then
   sudo pacman -S --noconfirm --needed limine-snapper-sync limine-mkinitcpio-hook
 

@@ -23,7 +23,7 @@ echo "Configuring systemd-boot for ASUS compatibility..."
 
 # Configure mkinitcpio hooks (same as Limine but without limine-specific hooks)
 sudo tee /etc/mkinitcpio.conf.d/aura_hooks.conf <<EOF >/dev/null
-HOOKS=(base udev plymouth keyboard autodetect microcode modconf kms keymap consolefont block encrypt filesystems fsck btrfs-overlayfs)
+HOOKS=(base udev plymouth keyboard autodetect microcode modconf kms keymap consolefont block encrypt filesystems fsck)
 EOF
 
 sudo tee /etc/mkinitcpio.conf.d/thunderbolt_module.conf <<EOF >/dev/null
@@ -56,6 +56,12 @@ if [[ -f "$BOOT_ENTRY" ]]; then
     echo "✓ Added Plymouth parameters (splash quiet)"
   fi
 
+  # Add NVIDIA DRM modeset parameter if not already present
+  if ! grep -q "nvidia-drm.modeset=1" "$BOOT_ENTRY"; then
+    sudo sed -i '/^options/ s/$/ nvidia-drm.modeset=1/' "$BOOT_ENTRY"
+    echo "✓ Added NVIDIA DRM modeset parameter"
+  fi
+
   echo "✓ Boot entry updated: $BOOT_ENTRY"
 fi
 
@@ -70,6 +76,12 @@ if [[ -f "$FALLBACK_ENTRY" ]]; then
   if ! grep -q "splash" "$FALLBACK_ENTRY"; then
     sudo sed -i '/^options/ s/$/ splash quiet/' "$FALLBACK_ENTRY"
     echo "✓ Added Plymouth parameters to fallback"
+  fi
+
+  # Add NVIDIA DRM modeset parameter to fallback if not already present
+  if ! grep -q "nvidia-drm.modeset=1" "$FALLBACK_ENTRY"; then
+    sudo sed -i '/^options/ s/$/ nvidia-drm.modeset=1/' "$FALLBACK_ENTRY"
+    echo "✓ Added NVIDIA DRM modeset parameter to fallback"
   fi
 
   echo "✓ Fallback entry updated: $FALLBACK_ENTRY"
@@ -101,4 +113,5 @@ echo "✓ systemd-boot configured for ASUS hardware"
 echo "  Bootloader: systemd-boot (ASUS-compatible)"
 echo "  Timeout: 0 (hold SPACE during boot for menu)"
 echo "  Plymouth: enabled (splash quiet)"
+echo "  NVIDIA DRM: modeset enabled (nvidia-drm.modeset=1)"
 echo "  Editor: disabled (security)"

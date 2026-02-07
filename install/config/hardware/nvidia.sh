@@ -1,102 +1,81 @@
-# ==============================================================================
-# Hyprland NVIDIA Setup Script for Arch Linux
-# ==============================================================================
-# This script automates the installation and configuration of NVIDIA drivers
-# for use with Hyprland on Arch Linux, following the official Hyprland wiki.
-#
-# Author: https://github.com/Kn0ax
-#
-# ==============================================================================
+#!/bin/bash
+# NVIDIA Driver Setup for Hyprland
+# Detects NVIDIA GPU and installs appropriate drivers
 
-# --- GPU Detection ---
-if [ -n "$(lspci | grep -i 'nvidia')" ]; then
-  # --- Driver Selection ---
-  # Turing (16xx, 20xx), Ampere (30xx), Ada (40xx), and newer recommend the open-source kernel modules
-  if echo "$(lspci | grep -i 'nvidia')" | grep -q -E "RTX [2-9][0-9]|GTX 16"; then
-    NVIDIA_DRIVER_PACKAGE="nvidia-open-dkms"
-  else
-    NVIDIA_DRIVER_PACKAGE="nvidia-dkms"
-  fi
+NVIDIA="$(lspci | grep -i 'nvidia')"
 
-  # Check which kernel is installed and set appropriate headers package
-  KERNEL_HEADERS="linux-headers" # Default
-  if pacman -Q linux-zen &>/dev/null; then
-    KERNEL_HEADERS="linux-zen-headers"
-  elif pacman -Q linux-lts &>/dev/null; then
-    KERNEL_HEADERS="linux-lts-headers"
-  elif pacman -Q linux-hardened &>/dev/null; then
-    KERNEL_HEADERS="linux-hardened-headers"
-  fi
+if [ -z "$NVIDIA" ]; then
+  echo "No NVIDIA GPU detected, skipping NVIDIA configuration"
+  exit 0
+fi
 
-  # force package database refresh
-  sudo pacman -Syu --noconfirm
+echo "NVIDIA GPU detected: $NVIDIA"
 
-  # Install packages
-  PACKAGES_TO_INSTALL=(
-    "${KERNEL_HEADERS}"
-    "${NVIDIA_DRIVER_PACKAGE}"
-    "nvidia-utils"
-    "nvidia-settings"
-    "lib32-nvidia-utils"
-    "egl-wayland"
-    "libva-nvidia-driver" # For VA-API hardware acceleration
-    "qt5-wayland"
-    "qt6-wayland"
-  )
+# Determine kernel headers package
+KERNEL_HEADERS="$(pacman -Qqs '^linux(-zen|-lts|-hardened)?$' | head -1)-headers"
 
-  sudo pacman -S --needed --noconfirm "${PACKAGES_TO_INSTALL[@]}"
+# Select driver based on GPU architecture
+if echo "$NVIDIA" | grep -qE "RTX [2-9][0-9]|GTX 16"; then
+  # Turing (16xx, 20xx), Ampere (30xx), Ada (40xx) - use open kernel modules
+  echo "Turing/Ampere/Ada GPU detected - using nvidia-open-dkms"
+  PACKAGES=(nvidia-open-dkms nvidia-utils nvidia-settings lib32-nvidia-utils egl-wayland libva-nvidia-driver qt5-wayland qt6-wayland)
+elif echo "$NVIDIA" | grep -qE "GTX 9|GTX 10|Quadro P|MX1|MX2|MX3"; then
+  # Pascal (10xx, Quadro Pxxx, MX150-350) and Maxwell (9xx, MX110-130) - legacy branch
+  echo "Pascal/Maxwell GPU detected - using nvidia-580xx-dkms (legacy)"
+  PACKAGES=(nvidia-580xx-dkms nvidia-580xx-utils lib32-nvidia-580xx-utils egl-wayland qt5-wayland qt6-wayland)
+else
+  echo "No compatible driver found for your NVIDIA GPU."
+  echo "See: https://wiki.archlinux.org/title/NVIDIA"
+  exit 0
+fi
 
-  # Configure modprobe for early KMS
-  # Note: ASUS-specific config will override this if needed (nvidia-asus.conf takes precedence)
+# Install driver packages
+echo "Installing NVIDIA packages: ${PACKAGES[*]}"
+aura-pkg-add "$KERNEL_HEADERS" "${PACKAGES[@]}" || {
+  echo "Error: Failed to install NVIDIA packages"
+  exit 1
+}
+
+# Configure modprobe for early KMS (generic config)
+# Note: ASUS-specific config in nvidia-asus.conf takes precedence if present
+if [[ ! -f /etc/modprobe.d/nvidia-asus.conf ]]; then
   echo "Configuring modprobe..."
-  if [[ ! -f /etc/modprobe.d/nvidia-asus.conf ]]; then
-    echo "options nvidia_drm modeset=1 fbdev=1" | sudo tee /etc/modprobe.d/nvidia.conf >/dev/null
-  else
-    echo "Skipping nvidia.conf (nvidia-asus.conf exists)"
-  fi
+  sudo tee /etc/modprobe.d/nvidia.conf >/dev/null <<'EOF'
+options nvidia_drm modeset=1 fbdev=1
+EOF
+else
+  echo "Skipping nvidia.conf (nvidia-asus.conf exists for ASUS hardware)"
+fi
 
-  # Configure mkinitcpio for early loading
-  MKINITCPIO_CONF="/etc/mkinitcpio.conf"
-
-  # Define modules
-  NVIDIA_MODULES="nvidia nvidia_modeset nvidia_uvm nvidia_drm"
-
-  # Create backup
-  sudo cp "$MKINITCPIO_CONF" "${MKINITCPIO_CONF}.backup"
-
-  # Remove any old nvidia modules to prevent duplicates
-  sudo sed -i -E 's/ nvidia_drm//g; s/ nvidia_uvm//g; s/ nvidia_modeset//g; s/ nvidia//g;' "$MKINITCPIO_CONF"
-  # Add the new modules at the start of the MODULES array
-  sudo sed -i -E "s/^(MODULES=\\()/\\1${NVIDIA_MODULES} /" "$MKINITCPIO_CONF"
-  # Clean up potential double spaces
-  sudo sed -i -E 's/  +/ /g' "$MKINITCPIO_CONF"
-
-  echo "Regenerating initramfs..."
-  sudo mkinitcpio -P
-
-  # Configure Limine bootloader kernel parameters
-  LIMINE_CFG="/boot/limine.cfg"
-  if [ -f "$LIMINE_CFG" ]; then
-    echo "Updating Limine bootloader configuration..."
-    # Add nvidia_drm.modeset=1 to kernel command line if not already present
-    if ! grep -q "nvidia_drm.modeset=1" "$LIMINE_CFG"; then
-      sudo sed -i 's/\(CMDLINE=.*\)/\1 nvidia_drm.modeset=1/' "$LIMINE_CFG"
-      sudo sed -i 's/\(KERNEL_CMDLINE=.*\)/\1 nvidia_drm.modeset=1/' "$LIMINE_CFG"
-    fi
-  fi
-
-  # Add NVIDIA environment variables to Hyprland env.conf
-  HYPRLAND_ENV_CONF="$HOME/.config/hypr/hyprland/env.conf"
-  mkdir -p "$(dirname "$HYPRLAND_ENV_CONF")"
-
-  echo "Configuring Hyprland environment variables..."
-  cat >>"$HYPRLAND_ENV_CONF" <<'EOF'
-
-# NVIDIA environment variables
-env = LIBVA_DRIVER_NAME,nvidia
-env = GBM_BACKEND,nvidia-drm
-env = __GLX_VENDOR_LIBRARY_NAME,nvidia
+# Configure mkinitcpio for early module loading (drop-in config)
+echo "Configuring initramfs modules..."
+sudo mkdir -p /etc/mkinitcpio.conf.d
+sudo tee /etc/mkinitcpio.conf.d/nvidia.conf >/dev/null <<'EOF'
+MODULES+=(nvidia nvidia_modeset nvidia_uvm nvidia_drm)
 EOF
 
-  echo "NVIDIA setup complete!"
+# Regenerate initramfs
+echo "Regenerating initramfs..."
+sudo mkinitcpio -P
+
+# Add NVIDIA environment variables to Hyprland
+HYPRLAND_ENV_CONF="$HOME/.config/hypr/envs.conf"
+if [ -f "$HYPRLAND_ENV_CONF" ]; then
+  # Only add if not already present
+  if ! grep -q "LIBVA_DRIVER_NAME,nvidia" "$HYPRLAND_ENV_CONF"; then
+    echo "Adding NVIDIA environment variables to Hyprland..."
+    cat >>"$HYPRLAND_ENV_CONF" <<'EOF'
+
+# NVIDIA environment variables
+env = NVD_BACKEND,direct
+env = LIBVA_DRIVER_NAME,nvidia
+env = __GLX_VENDOR_LIBRARY_NAME,nvidia
+EOF
+  else
+    echo "NVIDIA environment variables already configured in Hyprland"
+  fi
+else
+  echo "Warning: $HYPRLAND_ENV_CONF not found, skipping env vars"
 fi
+
+echo "✓ NVIDIA driver setup complete"
