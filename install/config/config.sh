@@ -1,6 +1,6 @@
-# Copy over Aura configs
+# Copy over Aura configs (user-customizable templates)
 mkdir -p ~/.config
-cp -R ~/.local/share/aura/default/* ~/.config/
+cp -R ~/.local/share/aura/config/* ~/.config/
 
 # Use default bashrc from Aura
 cp ~/.local/share/aura/default/bashrc ~/.bashrc

@@ -1,0 +1,14 @@
+# ############# Themes #############
+export QT_QPA_PLATFORMTHEME='qt6ct'
+export QT_WAYLAND_DISABLE_WINDOWDECORATION='1'
+export QT_AUTO_SCREEN_SCALE_FACTOR='1'
+
+# Ensure Aura bins are in the path
+export AURA_PATH=$HOME/.local/share/aura
+export PATH=$AURA_PATH/bin/:$PATH
+
+# Set default terminal and editor
+source ~/.config/uwsm/default
+
+# Activate mise if present on the system
+aura-cmd-present mise && eval "$(mise activate bash)"
