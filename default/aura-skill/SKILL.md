@@ -18,7 +18,6 @@ Manage [aura](https://github.com/cjlogic/aura) Linux systems - a beautiful, mode
 **ALWAYS invoke this skill when the user's request involves ANY of these:**
 
 - Editing ANY file in `~/.config/hypr/` (window rules, animations, keybindings, monitors, etc.)
-- Editing ANY file in `~/.config/walker/`
 - Editing terminal configs (alacritty, kitty, ghostty)
 - Editing ANY file in `~/.config/aura/`
 - Window behavior, animations, opacity, blur, gaps, borders
@@ -67,7 +66,6 @@ aura is built on:
 |-----------|---------|-----------------|
 | **Arch Linux** | Base OS | `/etc/`, `~/.config/` |
 | **Hyprland** | Wayland compositor/WM | `~/.config/hypr/` |
-| **Walker** | App launcher | `~/.config/walker/` |
 | **Alacritty/Kitty/Ghostty** | Terminals | `~/.config/<terminal>/` |
 | **Mako** | Notifications | `~/.config/mako/` |
 | **SwayOSD** | On-screen display | `~/.config/swayosd/` |
@@ -167,8 +165,6 @@ cp ~/.config/hypr/bindings.conf ~/.config/hypr/bindings.conf.bak.$(date +%s)
 
 # 4. Apply changes
 # - Hyprland: auto-reloads on save (no restart needed)
-# - Waybar: MUST restart with aura-restart-waybar
-# - Walker: MUST restart with aura-restart-walker
 # - Terminals: MUST restart with aura-restart-terminal
 ```
 
@@ -298,6 +294,6 @@ This creates a new migration file and outputs its path without opening an editor
 ## Example Requests
 
 - "Add a keybinding for Super+E to open file manager" -> Check existing bindings first, add `unbind` if needed, then add `bind` in `~/.config/hypr/bindings.conf`
-- "Configure my external monitor" -> Edit `~/.config/hypr/hyprland/monitors.conf`
-- "Make the window gaps smaller" -> Edit `~/.config/hypr/hyprland/looknfeel.conf`
+- "Configure my external monitor" -> Edit `~/.config/hypr/monitors.conf`
+- "Make the window gaps smaller" -> Edit `~/.config/hypr/looknfeel.conf`
 - "Set up night light to turn on at sunset" -> `aura-toggle-nightlight` or edit `~/.config/hypr/hyprsunset.conf`
