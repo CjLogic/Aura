@@ -15,6 +15,5 @@ if [[ -f "$FIRST_RUN_MODE" ]]; then
   sudo rm -f /etc/sudoers.d/first-run
 
   bash "$AURA_PATH/install/first-run/refresh-database.sh"
-  bash "$AURA_PATH/install/first-run/welcome.sh"
   bash "$AURA_PATH/install/first-run/aura-fish-shell.sh"
 fi
