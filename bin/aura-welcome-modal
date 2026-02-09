@@ -39,6 +39,12 @@ run_ambxst_install() {
         return 1
     fi
 
+    gum style \
+        --foreground 11 --align center --width 76 --margin "0 2" \
+        "Refreshing package database first..."
+    echo
+    sudo pacman -Syy --noconfirm
+
     if bash -c 'set -o pipefail; curl -L get.axeni.de/ambxst | sh'; then
         gum style \
             --foreground 10 --bold --align center \

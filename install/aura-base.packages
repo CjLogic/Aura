@@ -37,6 +37,7 @@ cups
 cups-browsed
 cups-filters
 cups-pdf
+sndio
 
 # === Dev Tools - Version Managers ===
 mise

@@ -40,6 +40,10 @@ EOF
 
 echo "✓ systemd-boot loader configuration updated"
 
+# Rebuild initramfs with updated hooks (includes plymouth)
+sudo mkinitcpio -P
+echo "✓ Initramfs rebuilt with plymouth support"
+
 # Update boot entries with Aura branding
 echo "Updating boot entry titles..."
 
