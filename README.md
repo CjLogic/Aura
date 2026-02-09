@@ -78,8 +78,8 @@ To verify your downloaded ISO is genuine and unmodified:
 gpg --keyserver keyserver.ubuntu.com --recv-keys 42E31974FF72C21F
 
 - Download ISO and signature
-curl -O <https://aura.cortexnest.icu/aura-2026.01.31-x86_64-master.iso>
-curl -O <https://aura.cortexnest.icu/aura-2026.01.31-x86_64-master.iso.sig>
+curl -O <https://aura.cortexnest.icu/aura-2026.02.09-x86_64-master.iso>
+curl -O <https://aura.cortexnest.icu/aura-2026.02.09-x86_64-master.iso.sig>
 
 - Verify
 gpg --verify aura-2026.01.31-x86_64-master.iso.sig aura-2026.01.31-x86_64-master.iso
