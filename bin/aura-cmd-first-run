@@ -11,7 +11,6 @@ if [[ -f "$FIRST_RUN_MODE" ]]; then
   bash "$AURA_PATH/install/first-run/cleanup-reboot-sudoers.sh"
   bash "$AURA_PATH/install/first-run/firewall.sh"
   bash "$AURA_PATH/install/first-run/dns-resolver.sh"
-  bash "$AURA_PATH/install/first-run/elephant.sh"
   sudo rm -f /etc/sudoers.d/first-run
 
   bash "$AURA_PATH/install/first-run/refresh-database.sh"
