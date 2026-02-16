@@ -61,6 +61,33 @@ run_ambxst_install() {
     fi
 }
 
+# Essential keybindings
+gum style \
+    --foreground 11 --border-foreground 14 --border rounded \
+    --width 76 --margin "0 2" --padding "1 2" \
+    "Essential Keybindings (SUPER = Windows/Meta key)"
+
+echo
+
+gum style \
+    --foreground 15 --width 76 --margin "0 2" \
+    "  SUPER + Enter          Open terminal" \
+    "  SUPER + SHIFT + B      Open browser" \
+    "  SUPER + SHIFT + F      File manager" \
+    "  SUPER + SHIFT + V      Toggle floating window" \
+    "  SHIFT + F11            Fullscreen" \
+    "  SUPER + SHIFT + C      Open VS Code" \
+    "  SUPER + PRINT          Color picker" \
+    "  CTRL  + ALT + DELETE   Close all windows"
+
+echo
+
+gum style \
+    --foreground 247 --italic --width 76 --margin "0 2" \
+    "  Tip: View all keybindings anytime with: aura-menu-keybindings --print"
+
+echo
+
 # Important setup instructions
 gum style \
     --foreground 11 --border-foreground 11 --border rounded \
@@ -100,7 +127,7 @@ echo
 
 gum style \
     --foreground 14 --background 236 --padding "0 2" --margin "0 2" \
-    "sudo pacman -Syyu"
+    "sudo pacman -Sy"
 
 echo
 

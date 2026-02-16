@@ -9,7 +9,7 @@ fi
 
 # Only proceed if Limine is installed
 if command -v limine &>/dev/null; then
-  sudo pacman -S --noconfirm --needed limine-snapper-sync limine-mkinitcpio-hook
+  sudo pacman -S --noconfirm --needed limine-snapper-sync limine-mkinitcpio-hook snap-pac
 
   sudo tee /etc/mkinitcpio.conf.d/aura_hooks.conf <<EOF >/dev/null
 HOOKS=(base udev plymouth keyboard autodetect microcode modconf kms keymap consolefont block encrypt filesystems fsck btrfs-overlayfs)
