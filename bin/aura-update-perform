@@ -4,7 +4,6 @@ set -e
 
 aura-update-time
 aura-update-keyring
-aura-update-available-reset
 aura-update-system-pkgs
 aura-migrate
 aura-hook post-update

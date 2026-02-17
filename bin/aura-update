@@ -7,6 +7,6 @@ trap 'echo ""; echo -e "\033[0;31mSomething went wrong during the update!\n\nPle
 if [[ $1 == "-y" ]] || aura-update-confirm; then
   aura-update-without-idle
   aura-snapshot create || [ $? -eq 127 ]
-  aura-update-git
+#   aura-update-git
   aura-update-perform
 fi
