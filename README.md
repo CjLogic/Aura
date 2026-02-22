@@ -1,4 +1,4 @@
-# Aura - Powerful Dev Tools meets Beautiful Aesthetics
+# Aura + Ambxst - Powerful Dev Tools meets Beautiful Aesthetics
 
 Aura is a custom Arch Linux-based distribution designed to integrate seamlessly with the [Ambxst](https://github.com/Axenide/Ambxst) Quickshell environment. It combines a pre-configured Hyprland desktop with a comprehensive suite of development tools.
 
