@@ -4,3 +4,4 @@ AURA_DOTS_INSTALL_INSTRUCTIONS.md
 aura/default/hypr/animations.conf
 nvidia.sh.new
 limine-snapper.sh.backupp
+bin/aura-update

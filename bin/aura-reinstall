@@ -11,7 +11,7 @@ echo -e "This will reinstall all the default Aura packages and reset all default
 
 if gum confirm "Are you sure you want to reinstall and lose all config changes?"; then
   echo "Resetting Aura repository"
-  git clone "https://github.com/CjLogic/aura.git" ~/.local/share/aura-new >/dev/null
+  git clone "https://github.com/CjLogic/Aura-Ambxst.git" ~/.local/share/aura-new >/dev/null
   rm -rf $AURA_PATH
   mv ~/.local/share/aura-new $AURA_PATH
 

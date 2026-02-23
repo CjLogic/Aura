@@ -160,7 +160,8 @@ echo
 gum style \
     --foreground 247 --width 76 --margin "0 2" \
     "Support & Documentation:" \
-    "  Aura: https://github.com/CjLogic/Aura" \
+    "  Aura: https://github.com/CjLogic/Aura-Ambxst" \
+    "  LogixHub: https://logixhub.icu/projects/aura/" \
     "  Ambxst: https://axeni.de/ambxst" \
     "  Arch Wiki: https://wiki.archlinux.org"
 

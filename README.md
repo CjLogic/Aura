@@ -168,6 +168,7 @@ This project incorporates components from:
 
 - **Aura**: <https://github.com/CjLogic/Aura>
 - **Aura ISO Builder**: <https://github.com/CjLogic/aura-iso>
+- **LogixHub**: <https://logixhub.icu/projects/aura/>
 - **Ambxst**: <https://github.com/Axenide/Ambxst>
 - **Arch Linux**: <https://archlinux.org>
 

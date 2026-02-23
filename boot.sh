@@ -19,8 +19,8 @@ echo -e "\n$ansi_art\n"
 
 sudo pacman -Syu --noconfirm --needed git
 
-# Use custom repo if specified, otherwise default to cjlogic/aura
-AURA_REPO="${AURA_REPO:-cjlogic/aura}"
+# Use custom repo if specified, otherwise default to cjlogic/aura-ambxst
+AURA_REPO="${AURA_REPO:-cjlogic/aura-ambxst}"
 
 echo -e "\nCloning Aura from: https://github.com/${AURA_REPO}.git"
 rm -rf ~/.local/share/aura/

@@ -11,7 +11,7 @@ description: >
 
 # aura Skill
 
-Manage [aura](https://github.com/cjlogic/aura) Linux systems - a beautiful, modern, opinionated Arch Linux distribution with Hyprland.
+Manage [aura](https://github.com/cjlogic/aura-ambxst) Linux systems - a beautiful, modern, opinionated Arch Linux distribution with Hyprland.
 
 ## When This Skill MUST Be Used
 
